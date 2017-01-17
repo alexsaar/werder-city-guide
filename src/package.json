@@ -1,0 +1,22 @@
+{
+  "name": "skill-nodejs-werder-city-guide",
+  "version": "1.0.0",
+  "description": "Werder City Guide skill.",
+  "main": "index.js",
+  "keywords": [
+    "alexa",
+    "skill",
+    "city",
+    "guide",
+    "werder"
+  ],
+  "author": "Alexander Saar",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-compress": "^1.3.0"
+  },
+  "dependencies": {
+    "alexa-sdk": "^1.0.6"
+  }
+}

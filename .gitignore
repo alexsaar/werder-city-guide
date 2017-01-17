@@ -1,0 +1,9 @@
+.DS_Store
+.idea/
+*.iml
+.jshintrc
+.project
+.settings
+.sublime-project
+.tern-project
+node_modules

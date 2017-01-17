@@ -1,0 +1,32 @@
+getOverview mehr info über werder
+getOverview wie ist es in werder
+getOverview erzähl mir mehr über werder 
+getOverview übersicht über werder
+getOverview werder übersicht
+
+getTopFiveIntent was sind die top fünf sehenswürdigkeiten 
+getTopFiveIntent top fünf sehenswürdigkeiten
+getTopFiveIntent die top fünf
+getTopFiveIntent top fünf
+getTopFiveIntent top fünf dinge die man machen sollte
+
+getAttractionIntent was sollte man tun
+getAttractionIntent eine attraktion
+getAttractionIntent attraktionen
+
+getMoreInfoIntent erzähl mir mehr über nummer {attraction}
+getMoreInfoIntent was ist nummer {attraction}
+getMoreInfoIntent mehr über nummer {attraction}
+getMoreInfoIntent nummer {attraction} 
+getMoreInfoIntent {attraction}
+
+getNewsIntent erzähl mir die lokalen neuigkeiten
+getNewsIntent was sind die neuigkeiten
+getNewsIntent lokale neuigkeiten
+getNewsIntent die neuigkeiten
+getNewsIntent neuigkeiten
+getNewsIntent lokal neuigkeiten
+
+AMAZON.StopIntent stop
+AMAZON.StopIntent aus
+AMAZON.StopIntent hör auf
