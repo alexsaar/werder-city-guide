@@ -7,7 +7,7 @@ var numberOfResults = 3;
 var location = "Werder Havel";
 var welcomeRepromt = "Du kannst mich nach lokalen Neuigkeiten fragen oder sag Hilfe. Was soll es sein?";
 var welcomeMessage = location + " City Guide. " + welcomeRepromt;
-var HelpMessage = "Folgende Dinge kannst du mich fragen: Erzähl mir von " + location + ". Erzähl mir die lokalen Neuigkeiten.  Was soll es sein?";
+var helpMessage = "Folgende Dinge kannst du mich fragen: Erzähl mir von " + location + ". Erzähl mir die lokalen Neuigkeiten.  Was soll es sein?";
 var goodbyeMessage = "OK, viel Spass in " + location + ".";
 var newsIntroMessage = "Hier sind die " + numberOfResults + " letzten Neuigkeiten für " + location + ". ";
 var moreInfoMessage = " Schaue in deine Alexa app für mehr Informationen.";
@@ -18,48 +18,36 @@ var states = {
 };
 
 var alexa;
-var output = "";
 
 var newSessionHandlers = {
     'LaunchRequest': function() {
         this.handler.state = states.FETCHMODE;
-        output = welcomeMessage;
-        this.emit(':ask', output, welcomeRepromt);
+        this.emit(':ask', welcomeMessage, welcomeRepromt);
     },
     'getNewsIntent': function() {
         this.handler.state = states.FETCHMODE;
         this.emitWithState('getNewsIntent');
     },
     'Unhandled': function() {
-        output = HelpMessage;
-        this.emit(':ask', output, welcomeRepromt);
+        this.emit(':ask', helpMessage, welcomeRepromt);
     },
     'AMAZON.StopIntent': function() {
         this.emit(':tell', goodbyeMessage);
     },
     'SessionEndedRequest': function() {
-        // Use this function to clear up and save any data needed between sessions
         this.emit('AMAZON.StopIntent');
     }
 };
 
 var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     'AMAZON.HelpIntent': function () {
-        output = HelpMessage;
-        this.emit(':ask', output, HelpMessage);
-    },
-    'AMAZON.YesIntent': function () {
-        output = HelpMessage;
-        this.emit(':ask', output, HelpMessage);
-    },
-    'AMAZON.NoIntent': function () {
-        output = HelpMessage;
-        this.emit(':ask', output, HelpMessage);
+        this.emit(':ask', helpMessage, helpMessage);
     },
     'AMAZON.StopIntent': function () {
         this.emit(':tell', goodbyeMessage);
     },
     'getNewsIntent': function () {
+    	var output = "";
     	var feedparser = new FeedParser();
     	var req = request('http://werder-life.de/feed/');
     	req.on('response', function (res) {
@@ -101,15 +89,11 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     	  alexa.emit(':tellWithCard', output, cardTitle, cardContent);
     	});
     },
-    'AMAZON.RepeatIntent': function () {
-        this.emit(':ask', output, HelpMessage);
-    },
     'SessionEndedRequest': function () {
         this.emit('AMAZON.StopIntent');
     },
     'Unhandled': function () {
-        output = HelpMessage;
-        this.emit(':ask', output, HelpMessage);
+        this.emit(':ask', helpMessage, helpMessage);
     }
 });
 
