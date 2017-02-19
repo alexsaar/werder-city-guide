@@ -20,12 +20,9 @@ getMoreInfoIntent mehr über nummer {attraction}
 getMoreInfoIntent nummer {attraction} 
 getMoreInfoIntent {attraction}
 
-getNewsIntent erzähl mir die lokalen neuigkeiten
-getNewsIntent was sind die neuigkeiten
-getNewsIntent lokale neuigkeiten
-getNewsIntent die neuigkeiten
-getNewsIntent neuigkeiten
-getNewsIntent lokale neuigkeiten
+getNewsIntent erzähl mir Neuigkeiten zu Werder
+getNewsIntent was gibt es Neues in Werder
+getNewsIntent Werder Neuigkeiten
 
 AMAZON.StopIntent stop
 AMAZON.StopIntent aus

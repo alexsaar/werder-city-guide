@@ -3,13 +3,12 @@ var FeedParser = require('feedparser');
 var striptags = require('striptags');
 var request = require('request');
 
-var numberOfResults = 3;
 var location = "Werder Havel";
 var welcomeRepromt = "Du kannst mich nach lokalen Neuigkeiten fragen oder sag Hilfe. Was soll es sein?";
 var welcomeMessage = location + " City Guide. " + welcomeRepromt;
 var helpMessage = "Folgende Dinge kannst du mich fragen: Erzähl mir von " + location + ". Erzähl mir die lokalen Neuigkeiten.  Was soll es sein?";
 var goodbyeMessage = "OK, viel Spass in " + location + ".";
-var newsIntroMessage = "Hier sind die " + numberOfResults + " letzten Neuigkeiten für " + location + ". ";
+var newsIntroMessage = "Hier sind die Neuigkeiten für " + location + ". ";
 var moreInfoMessage = " Schaue in deine Alexa app für mehr Informationen.";
 var dataErrorMessage = "Es gab ein Problem beim Abruf der Daten. Bitte versuche es noch einmal.";
 
@@ -47,12 +46,10 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
         this.emit(':tell', goodbyeMessage);
     },
     'getNewsIntent': function () {
-    	var output = "";
     	var feedparser = new FeedParser();
     	var req = request('http://werder-life.de/feed/');
     	req.on('response', function (res) {
     		var stream = this;
-
     		if (res.statusCode !== 200) {
     			this.emit('error', new Error('Bad status code'));
     		} else {
@@ -60,33 +57,35 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     		}
     	});
     	req.on('error', function (error) {
-    		output = dataErrorMessage;
-    		this.emit(':tell', output);
+			console.log("REQUEST ERROR: " + error);
+    		alexa.emit(':tell', dataErrorMessage);
     	});
     	feedparser.on('error', function (error) {
-    		output = dataErrorMessage;
-    		this.emit(':tell', output);
+			console.log("PARSING ERROR: " + error);
+    		alexa.emit(':tell', dataErrorMessage);
     	});
     	feedparser.on('readable', function () {
-    	  var stream = this;
-    	  var item;
-
-    	  var cardTitle = location + " Neuigkeiten";
-    	  var cardContent = "Daten von Werder Life\n\n";
+			var stream = this;
     	  
-    	  output = newsIntroMessage;
+			var cardTitle = location + " Neuigkeiten";
+			var cardContent = "Daten von Werder Life\n\n";
     	  
-    	  var i = 0;
-    	  while (item = stream.read() && i < numberOfResults) {
-    		  var headline = striptags(item.title) + ". " + striptags(item.description);
-    		  var index = i + 1;
-    		  output += " Neuigkeit " + index + ": " + headline + ";";
+			var output = newsIntroMessage;
+    	  
+			var index = 1;
+			var item;
+			while (item = stream.read()) {    		      		  
+				var headline = striptags(item.title) + ". " + striptags(item.description);
+    		      		  
+				output += " Neuigkeit " + index + ": " + headline;
 
-    		  cardContent += " Neuigkeit " + index + ".\n";
-    		  cardContent += headline + ".\n\n";
-    	  }
-    	  output += moreInfoMessage;
-    	  alexa.emit(':tellWithCard', output, cardTitle, cardContent);
+				cardContent += " Neuigkeit " + index + ".\n";
+				cardContent += headline + "\n\n";
+				
+				index++;
+			}
+			output += moreInfoMessage;
+			alexa.emit(':tellWithCard', output, cardTitle, cardContent);
     	});
     },
     'SessionEndedRequest': function () {
