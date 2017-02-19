@@ -6,12 +6,12 @@ var request = require('request');
 var numberOfResults = 3;
 var location = "Werder Havel";
 var welcomeRepromt = "Du kannst mich nach lokalen Neuigkeiten fragen oder sag Hilfe. Was soll es sein?";
-var welcomeMessage = location + " Guide. " + welcomeRepromt;
+var welcomeMessage = location + " City Guide. " + welcomeRepromt;
 var HelpMessage = "Folgende Dinge kannst du mich fragen: Erzähl mir von " + location + ". Erzähl mir die lokalen Neuigkeiten.  Was soll es sein?";
 var goodbyeMessage = "OK, viel Spass in " + location + ".";
 var newsIntroMessage = "Hier sind die " + numberOfResults + " letzten Neuigkeiten für " + location + ". ";
 var moreInfoMessage = " Schaue in deine Alexa app für mehr Informationen.";
-var dataErrorMessage = "There was a problem with getting data please try again";
+var dataErrorMessage = "Es gab ein Problem beim Abruf der Daten. Bitte versuche es noch einmal.";
 
 var states = {
 	FETCHMODE: '_FETCHMODE'
@@ -109,7 +109,7 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     },
     'Unhandled': function () {
         output = HelpMessage;
-        this.emit(':ask', output, welcomeRepromt);
+        this.emit(':ask', output, HelpMessage);
     }
 });
 
