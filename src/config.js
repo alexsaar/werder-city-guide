@@ -9,5 +9,9 @@ config.newsIntroMessage = "Hier sind die Neuigkeiten für " + config.location + 
 config.moreInfoMessage = " Schaue in deine Alexa app für mehr Informationen.";
 config.dataErrorMessage = "Es gab ein Problem beim Abruf der Daten. Bitte versuche es noch einmal.";
 config.helpMessage = "Folgende Dinge kannst du mich fragen: Erzähl mir von " + config.location + ". Erzähl mir die lokalen Neuigkeiten.  Was soll es sein?";
+config.cardTitle = config.location + " Neuigkeiten";
+config.endpoint = 'http://werder-life.de/feed/';
+config.newsString = 'Neuigkeit';
+
 
 module.exports = config

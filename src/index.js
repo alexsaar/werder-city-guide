@@ -5,32 +5,19 @@ var request = require('request');
 var config = require('./config');
 
 var states = {
-	FETCHMODE: '_FETCHMODE'
+	NEWSMODE: '_NEWSMODE'
 };
 
 var alexa;
 
 var newSessionHandlers = {
-    'LaunchRequest': function() {
-        this.handler.state = states.FETCHMODE;
+    'NewSession': function() {
+        this.handler.state = states.NEWSMODE;
         this.emit(':ask', config.welcomeMessage, config.welcomeRepromt);
-    },
-    'getNewsIntent': function() {
-        this.handler.state = states.FETCHMODE;
-        this.emitWithState('getNewsIntent');
-    },
-    'Unhandled': function() {
-        this.emit(':ask', config.helpMessage, config.welcomeRepromt);
-    },
-    'AMAZON.StopIntent': function() {
-        this.emit(':tell', config.goodbyeMessage);
-    },
-    'SessionEndedRequest': function() {
-        this.emit('AMAZON.StopIntent');
     }
 };
 
-var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
+var newsModeHandler = Alexa.CreateStateHandler(states.NEWSMODE, {
     'AMAZON.HelpIntent': function () {
         this.emit(':ask', config.helpMessage, config.helpMessage);
     },
@@ -39,12 +26,12 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     },
     'getNewsIntent': function () {
 		var index = 1;
-		var cardTitle = config.location + " Neuigkeiten";
-		var cardContent = "Daten von Werder Life\n\n";
+		
+		var cardContent = "";
 		var output = config.newsIntroMessage;
 		
     	var feedparser = new FeedParser();
-    	var req = request('http://werder-life.de/feed/');
+    	var req = request(config.endpoint);
     	req.on('response', function (res) {
     		var stream = this;
     		if (res.statusCode !== 200) {
@@ -65,20 +52,22 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
 			var stream = this;
     	  
 			var item;
-			while (item = stream.read()) {    		      		  
-				var headline = striptags(item.title) + ". " + striptags(item.description);
-    		      		  
-				output += " Neuigkeit " + index + ": " + headline;
+			while (item = stream.read()) {
+				var title = striptags(item.title);
+				var description = striptags(item.description)
 
-				cardContent += " Neuigkeit " + index + ".\n";
-				cardContent += headline + "\n\n";
+				//output += config.newsString + " " + index + ": " + headline + " ";
+				output += config.newsString + " " + index + ": " + title + ". ";
+
+				cardContent += config.newsString + " " + index + ".\n";
+				cardContent += title + ". " + description + "\n\n";
 				
 				index++;
 			}
     	});
     	feedparser.on('end', function () {
 			output += config.moreInfoMessage;
-			alexa.emit(':tellWithCard', output, cardTitle, cardContent);
+			alexa.emit(':tellWithCard', output, config.cardTitle, cardContent);
     	});
     },
     'SessionEndedRequest': function () {
@@ -92,6 +81,6 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
 exports.handler = function (event, context, callback) {
     alexa = Alexa.handler(event, context);
 	alexa.appId = config.appId;
-	alexa.registerHandlers(newSessionHandlers, startSearchHandlers);
+	alexa.registerHandlers(newSessionHandlers, newsModeHandler);
     alexa.execute();
 };

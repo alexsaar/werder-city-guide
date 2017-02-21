@@ -1,14 +1,16 @@
 {
   "session": {
-    "sessionId": "SessionId.26bbb7a7-1e88-49a3-82e2-3dd2ae653dfc",
+    "sessionId": "SessionId.498a9411-dce7-4c9a-98f5-2c731a379303",
     "application": {
       "applicationId": "amzn1.ask.skill.438ee310-cf39-4b57-860a-ba45a52ce948"
     },
-    "attributes": {},
+    "attributes": {
+      "STATE": "_NEWSMODE"
+    },
     "user": {
       "userId": "amzn1.ask.account.AEKKJJIPSSSDPFZD7DIDLNFI2KPCISJOJFXIWQR6RXGRSFLQV5PBBMGEMG6J3SOPFTXPMN5GUM37CWQD7CWTU5BDUMXIGMQSAYQG245AHTXIRWOXSDORDP6B7D2CGUK4CWJAV7U6FBAIZF6AQGR57MBPBH73E35LS6VYZGQSIDFBSGST4KOO5QVCLLQWXXAGVDOEY2455JGCYFA"
     },
-    "new": true
+    "new": false
   },
   "request": {
     "type": "IntentRequest",
