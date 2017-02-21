@@ -14,9 +14,6 @@
   },
   "request": {
     "type": "IntentRequest",
-    "requestId": "EdwRequestId.2bd0e077-c1ac-4fd7-93cc-2b4c13e4f3a5",
-    "locale": "de-DE",
-    "timestamp": "2017-02-21T12:51:11Z",
     "intent": {
       "name": "AMAZON.HelpIntent",
       "slots": {}
