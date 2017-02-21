@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 			default: {
 				arn: 'arn:aws:lambda:eu-west-1:662991220151:function:werderCityGuide',
 				options: {
-					timeout: 10,
+					timeout: 60,
 					memory: 128,
 					region: 'eu-west-1'
 				}
@@ -48,11 +48,22 @@ module.exports = function(grunt) {
 					event: '../test/news.json'
 				}
 			}
+		},
+		plantuml: {
+			default: {
+				src: ['../docs/*.puml'],
+				dest: '../docs',
+				options: {
+					charset: 'utf-8',
+					format: 'png'
+				}
+			}
 		}
     });
 	
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-aws-lambda');
+	grunt.loadNpmTasks('grunt-plantuml');
 		
 	grunt.registerTask('default', ['compress']);
 	grunt.registerTask('deploy', ['lambda_package', 'lambda_deploy']);

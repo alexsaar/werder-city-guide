@@ -1,0 +1,7 @@
+@startuml
+
+[*] --> NEWS : Open
+NEWS --> NEWS : Help
+NEWS --> [*] : Stop
+
+@enduml
