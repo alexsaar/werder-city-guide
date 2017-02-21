@@ -36,6 +36,13 @@ module.exports = function(grunt) {
 					dist_folder: '../dist'
 				}
 			}
+		},
+		lambda_invoke: {
+			help: {
+				options: {
+					event: '../test/help.json'
+				}
+			}
 		}
     });
 	
@@ -44,4 +51,6 @@ module.exports = function(grunt) {
 		
 	grunt.registerTask('default', ['compress']);
 	grunt.registerTask('deploy', ['lambda_package', 'lambda_deploy']);
+	
+	grunt.registerTask('test_help', ['lambda_invoke:help']);
 };
