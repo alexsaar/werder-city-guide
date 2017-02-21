@@ -96,7 +96,7 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     }
 });
 
-exports.handler = function (event, context, callback) {
+exports.handler = function (event, context) {
     alexa = Alexa.handler(event, context);
     alexa.registerHandlers(newSessionHandlers, startSearchHandlers);
     alexa.execute();
