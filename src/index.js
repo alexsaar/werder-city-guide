@@ -38,6 +38,11 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
         this.emit(':tell', config.goodbyeMessage);
     },
     'getNewsIntent': function () {
+		var index = 1;
+		var cardTitle = config.location + " Neuigkeiten";
+		var cardContent = "Daten von Werder Life\n\n";
+		var output = config.newsIntroMessage;
+		
     	var feedparser = new FeedParser();
     	var req = request('http://werder-life.de/feed/');
     	req.on('response', function (res) {
@@ -59,12 +64,6 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     	feedparser.on('readable', function () {
 			var stream = this;
     	  
-			var cardTitle = config.location + " Neuigkeiten";
-			var cardContent = "Daten von Werder Life\n\n";
-    	  
-			var output = config.newsIntroMessage;
-    	  
-			var index = 1;
 			var item;
 			while (item = stream.read()) {    		      		  
 				var headline = striptags(item.title) + ". " + striptags(item.description);
@@ -76,6 +75,8 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
 				
 				index++;
 			}
+    	});
+    	feedparser.on('end', function () {
 			output += config.moreInfoMessage;
 			alexa.emit(':tellWithCard', output, cardTitle, cardContent);
     	});
