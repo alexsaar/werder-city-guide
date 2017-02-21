@@ -2,15 +2,7 @@ var Alexa = require('alexa-sdk');
 var FeedParser = require('feedparser');
 var striptags = require('striptags');
 var request = require('request');
-
-var location = "Werder Havel";
-var welcomeRepromt = "Du kannst mich nach lokalen Neuigkeiten fragen oder sag Hilfe. Was soll es sein?";
-var welcomeMessage = location + " City Guide. " + welcomeRepromt;
-var helpMessage = "Folgende Dinge kannst du mich fragen: Erzähl mir von " + location + ". Erzähl mir die lokalen Neuigkeiten.  Was soll es sein?";
-var goodbyeMessage = "OK, viel Spass in " + location + ".";
-var newsIntroMessage = "Hier sind die Neuigkeiten für " + location + ". ";
-var moreInfoMessage = " Schaue in deine Alexa app für mehr Informationen.";
-var dataErrorMessage = "Es gab ein Problem beim Abruf der Daten. Bitte versuche es noch einmal.";
+var config = require('./config');
 
 var states = {
 	FETCHMODE: '_FETCHMODE'
@@ -21,17 +13,17 @@ var alexa;
 var newSessionHandlers = {
     'LaunchRequest': function() {
         this.handler.state = states.FETCHMODE;
-        this.emit(':ask', welcomeMessage, welcomeRepromt);
+        this.emit(':ask', config.welcomeMessage, config.welcomeRepromt);
     },
     'getNewsIntent': function() {
         this.handler.state = states.FETCHMODE;
         this.emitWithState('getNewsIntent');
     },
     'Unhandled': function() {
-        this.emit(':ask', helpMessage, welcomeRepromt);
+        this.emit(':ask', config.helpMessage, config.welcomeRepromt);
     },
     'AMAZON.StopIntent': function() {
-        this.emit(':tell', goodbyeMessage);
+        this.emit(':tell', config.goodbyeMessage);
     },
     'SessionEndedRequest': function() {
         this.emit('AMAZON.StopIntent');
@@ -40,10 +32,10 @@ var newSessionHandlers = {
 
 var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     'AMAZON.HelpIntent': function () {
-        this.emit(':ask', helpMessage, helpMessage);
+        this.emit(':ask', config.helpMessage, config.helpMessage);
     },
     'AMAZON.StopIntent': function () {
-        this.emit(':tell', goodbyeMessage);
+        this.emit(':tell', config.goodbyeMessage);
     },
     'getNewsIntent': function () {
     	var feedparser = new FeedParser();
@@ -58,19 +50,19 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
     	});
     	req.on('error', function (error) {
 			console.log("REQUEST ERROR: " + error);
-    		alexa.emit(':tell', dataErrorMessage);
+    		alexa.emit(':tell', config.dataErrorMessage);
     	});
     	feedparser.on('error', function (error) {
 			console.log("PARSING ERROR: " + error);
-    		alexa.emit(':tell', dataErrorMessage);
+    		alexa.emit(':tell', config.dataErrorMessage);
     	});
     	feedparser.on('readable', function () {
 			var stream = this;
     	  
-			var cardTitle = location + " Neuigkeiten";
+			var cardTitle = config.location + " Neuigkeiten";
 			var cardContent = "Daten von Werder Life\n\n";
     	  
-			var output = newsIntroMessage;
+			var output = config.newsIntroMessage;
     	  
 			var index = 1;
 			var item;
@@ -84,7 +76,7 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
 				
 				index++;
 			}
-			output += moreInfoMessage;
+			output += config.moreInfoMessage;
 			alexa.emit(':tellWithCard', output, cardTitle, cardContent);
     	});
     },
@@ -92,12 +84,13 @@ var startSearchHandlers = Alexa.CreateStateHandler(states.FETCHMODE, {
         this.emit('AMAZON.StopIntent');
     },
     'Unhandled': function () {
-        this.emit(':ask', helpMessage, helpMessage);
+        this.emit(':ask', config.helpMessage, config.helpMessage);
     }
 });
 
-exports.handler = function (event, context) {
+exports.handler = function (event, context, callback) {
     alexa = Alexa.handler(event, context);
-    alexa.registerHandlers(newSessionHandlers, startSearchHandlers);
+	alexa.appId = config.appId;
+	alexa.registerHandlers(newSessionHandlers, startSearchHandlers);
     alexa.execute();
 };
