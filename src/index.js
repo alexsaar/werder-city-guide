@@ -60,7 +60,7 @@ var newsModeHandler = Alexa.CreateStateHandler(states.NEWSMODE, {
 				output += config.newsString + " " + index + ": " + title + ". ";
 
 				cardContent += config.newsString + " " + index + ".\n";
-				cardContent += title + ". " + description + "\n\n";
+				cardContent += title + ". " + "\n\n";
 				
 				index++;
 			}
