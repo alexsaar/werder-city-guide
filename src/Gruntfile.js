@@ -42,6 +42,11 @@ module.exports = function(grunt) {
 				options: {
 					event: '../test/help.json'
 				}
+			},
+			news: {
+				options: {
+					event: '../test/news.json'
+				}
 			}
 		}
     });
@@ -53,4 +58,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('deploy', ['lambda_package', 'lambda_deploy']);
 	
 	grunt.registerTask('test_help', ['lambda_invoke:help']);
+	grunt.registerTask('test_news', ['lambda_invoke:news']);
 };
